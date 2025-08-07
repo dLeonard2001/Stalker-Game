@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     Vector2 currentInputVector;
     Vector2 smoothInputVelocity;
 
-    Vector3 playerVelocity;
+    Vector3 jumpVelocity;
     
     // Start is called before the first frame update
     void Start()
@@ -59,11 +59,11 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded)
         {
-            playerVelocity.y = 0f;
+            jumpVelocity.y = 0f;
         }
         else
         {
-            playerVelocity.y += gravityValue * Time.deltaTime;
+            jumpVelocity.y += gravityValue * Time.deltaTime;
         }
         
         transform.eulerAngles = new Vector3(0f, cam.transform.eulerAngles.y, 0f);
@@ -77,10 +77,10 @@ public class PlayerController : MonoBehaviour
 
         if (readyToJump)
         {
-            playerVelocity.y += Mathf.Sqrt(jumpForce * -3.0f * gravityValue);
+            jumpVelocity.y += Mathf.Sqrt(jumpForce * -3.0f * gravityValue);
             readyToJump = false;
         }
         
-        characterController.Move(playerVelocity * Time.deltaTime);
+        characterController.Move(jumpVelocity * Time.deltaTime);
     }
 }
