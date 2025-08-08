@@ -53,4 +53,14 @@ public class InputManager : MonoBehaviour
     {
         return playerControls.PlayerMovement.Jump.IsPressed();
     }
+
+    public bool IsCrouching()
+    {
+        return playerControls.PlayerMovement.Crouch.IsPressed();
+    }
+
+    public bool DoneCrouching()
+    {
+        return playerControls.PlayerMovement.Crouch.WasReleasedThisFrame();
+    }
 }
