@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
         cam = Camera.main;
         rb = GetComponent<Rigidbody>();
         inputManager = InputManager.Instance;
-        defaultDrag = rb.drag;
+        defaultDrag = rb.linearDamping;
         
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
         isCrouching = inputManager.IsCrouching();
         quitCrouchThisFrame = inputManager.DoneCrouching();
         
-        rb.drag = isGrounded ? defaultDrag : 0.5f;
+        rb.linearDamping = isGrounded ? defaultDrag : 0.5f;
     }
 
     void FixedUpdate()
@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
             currentMovement *= 0.5f;
         
         // clamp the horizontal speed of the player
-        Vector3 vel = rb.velocity;
+        Vector3 vel = rb.linearVelocity;
         Vector3 horizontalVel = new Vector3(vel.x, 0, vel.z);
         
         if (readyToJump) // jump key was pressed
@@ -105,12 +105,12 @@ public class PlayerController : MonoBehaviour
         if (isSliding && horizontalVel.magnitude > maxHorizontalSpeed * 2)
         {
             horizontalVel = horizontalVel.normalized * maxHorizontalSpeed;
-            rb.velocity = new Vector3(horizontalVel.x, rb.velocity.y, horizontalVel.z);
+            rb.linearVelocity = new Vector3(horizontalVel.x, rb.linearVelocity.y, horizontalVel.z);
         }
         else if (horizontalVel.magnitude > maxHorizontalSpeed && !isSliding)
         {
             horizontalVel = horizontalVel.normalized * maxHorizontalSpeed;
-            rb.velocity = new Vector3(horizontalVel.x, rb.velocity.y, horizontalVel.z);
+            rb.linearVelocity = new Vector3(horizontalVel.x, rb.linearVelocity.y, horizontalVel.z);
         }
         else
             rb.AddForce(currentMovement * (moveSpeed * bonusMoveSpeed * 2.0f) , ForceMode.Force);
